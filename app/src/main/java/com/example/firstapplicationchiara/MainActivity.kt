@@ -34,11 +34,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.example.firstapplicationchiara.ui.theme.FirstApplicationChiaraTheme
+import kotlinx.serialization.Serializable
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+
+
+@Serializable class DestProfil
+@Serializable class DestFilms
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,13 +55,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+            val navController = rememberNavController()
             FirstApplicationChiaraTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding),
-                        windowSizeClass
-                    )
+                    NavHost(navController = navController, startDestination = DestProfil(), modifier = Modifier.padding(innerPadding)) {
+                        composable<DestProfil> { Greeting(name = "app", classes = windowSizeClass,navController = navController ) }
+                        composable<DestFilms> { DescFilms() }
+
+                    }
                 }
             }
 
@@ -60,110 +70,4 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier ,classes: WindowSizeClass) {
-    val classeLargeur = classes.windowWidthSizeClass
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
-        when (classeLargeur) {
-            WindowWidthSizeClass.COMPACT -> {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    ProfileSection()
-                    InformationSection()
-                    ContactSection()
-                    Spacer(Modifier.height(100.dp))
-                    StartButton()
-                }
-
-            }/* largeur faible */
-                else -> {
-                    Row(){
-                        Column(horizontalAlignment = AbsoluteAlignment.Left) {
-                            ProfileSection()
-                            InformationSection()
-                        }
-                        Spacer(Modifier.height(300.dp))
-                        Column (horizontalAlignment = Alignment.CenterHorizontally){
-                            ContactSection()
-                            Spacer(Modifier.height(50.dp))
-                            StartButton()
-                        }
-                    }
-
-
-                }
-
-
-        }
-    }
-}
-
-@Composable
-fun ProfileSection() {
-    Image(
-        painter = painterResource(R.drawable.th_1795365130),
-        contentDescription = "Profile",
-        modifier = Modifier
-            .size(100.dp) // Taille de l'image
-            .clip(CircleShape)
-    )
-
-    Text(
-        text = "Chiara Soulié",
-        fontSize = 30.sp,
-        fontWeight = FontWeight.Bold,
-    )
-}
-
-@Composable
-fun InformationSection() {
-    Text(text = "Étudiante en e-santé")
-    Text(
-        text = "École d'ingénieur ISIS",
-        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
-    )
-    Spacer(Modifier.height(60.dp))
-}
-
-@Composable
-fun ContactSection() {
-    Contactligne(
-        iconRes = R.drawable.th_349871517,
-        contactText = "souliechiara@gmail.com"
-    )
-    Contactligne(
-        iconRes = R.drawable.th_3906094816,
-        contactText = "www.linkedin.com/in/chiarasoulié"
-    )
-}
-
-@Composable
-fun Contactligne(iconRes: Int, contactText: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Image(
-            painter = painterResource(iconRes),
-            contentDescription = null,
-            modifier = Modifier
-                .size(30.dp)
-                .padding(end = 8.dp)
-        )
-        Text(text = contactText)
-    }
-}
-
-@Composable
-fun StartButton() {
-    Button(onClick = { /* Add your action */ }) {
-        Text("Démarrer")
-    }
-}
-
-
-
-
-
-
-@Composable
-fun MyScreen(showTopAppBar: Boolean) {
-
-}
