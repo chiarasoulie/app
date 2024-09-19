@@ -7,6 +7,7 @@ import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,8 +19,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -56,8 +63,21 @@ class MainActivity : ComponentActivity() {
         setContent {
             val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
             val navController = rememberNavController()
+
             FirstApplicationChiaraTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(bottomBar = {
+                    NavigationBar {
+                        val currentDestination = navController.currentBackStackEntry?.destination
+                        NavigationBarItem(
+                            icon = {  Icon(Icons.Rounded.AccountCircle, contentDescription ="menu") }, label = { Text("Mon profil") },
+                            selected = currentDestination?.hasRoute<DestProfil>() == true,
+                            onClick = { navController.navigate(DestProfil()) })
+                        NavigationBarItem(
+                            icon = { Icon(Icons.Rounded.Menu, contentDescription ="menu")}, label = { Text("Films") },
+                            selected = currentDestination?.hasRoute<DestFilms>() == true,
+                            onClick = { navController.navigate(DestFilms()) })
+                    }
+                })  { innerPadding ->
                     NavHost(navController = navController, startDestination = DestProfil(), modifier = Modifier.padding(innerPadding)) {
                         composable<DestProfil> { Greeting(name = "app", classes = windowSizeClass,navController = navController ) }
                         composable<DestFilms> { DescFilms() }
