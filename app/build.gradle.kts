@@ -51,7 +51,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.retrofit)
+
     implementation(libs.converter.moshi)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -71,4 +71,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit)
+    implementation(libs.coil.compose)
 }
