@@ -5,18 +5,27 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,6 +40,7 @@ import kotlinx.serialization.Serializable
 
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,6 +54,24 @@ class MainActivity : ComponentActivity() {
 
             FirstApplicationChiaraTheme {
                 Scaffold(
+                    topBar = {
+                        SearchBar(
+                            query = searchQuery.text,
+                            onQueryChange = { newValue -> searchQuery = TextFieldValue(newValue) },
+                            onSearch = { isSearchActive = false },
+                            active = isSearchActive,
+                            onActiveChange = { isActive -> isSearchActive = isActive },
+                            placeholder = { Text("Rechercher un film") },
+                            leadingIcon = {
+                                Icon(imageVector = Icons.Rounded.Search, contentDescription = "Icône de recherche")
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+                            // Suggestions ou résultats de recherche peuvent être ajoutés ici si nécessaire
+                        }
+                    },
                     bottomBar = {
                         if (currentDestination?.hasRoute<DestProfil>() == false) {
 
