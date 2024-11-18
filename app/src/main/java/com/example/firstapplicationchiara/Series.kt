@@ -25,18 +25,18 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
 @Composable
-fun DescFilms(viewmodel: MainViewModel) {
-    val movies by viewmodel.movies.collectAsState()
+fun DescSeries(viewmodel: MainViewModel) {
+    val series by viewmodel.series.collectAsState()
 
 
     LaunchedEffect(true) {
-        viewmodel.getFilms()
+        viewmodel.getSeries()
     }
 
 
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
 
-        items(movies) { movie ->
+        items(series) { serie ->
             Column {
                 ElevatedCard(elevation = CardDefaults.cardElevation(
                     defaultElevation = 6.dp),
@@ -47,11 +47,11 @@ fun DescFilms(viewmodel: MainViewModel) {
                         containerColor = Color(0xFFD2B48C)
                     )) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w780/" + movie.poster_path,
+                        model = "https://image.tmdb.org/t/p/w780/" + serie.poster_path,
                         contentDescription = "films"
                     )
                     Text(
-                        text = movie.original_title,
+                        text = serie.name,
                         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                         modifier = Modifier
                             .padding(top = 8.dp)
@@ -59,7 +59,7 @@ fun DescFilms(viewmodel: MainViewModel) {
                     )
                     // Date de sortie
                     Text(
-                        text = movie.release_date,
+                        text = serie.first_air_date,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )

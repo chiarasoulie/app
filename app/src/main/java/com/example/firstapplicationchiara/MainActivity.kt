@@ -6,11 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,8 +29,13 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
@@ -32,11 +43,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.firstapplicationchiara.ui.theme.FirstApplicationChiaraTheme
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.Serializable
 
 
 @Serializable class DestProfil
 @Serializable class DestFilms
+@Serializable class DestSeries
+@Serializable class DestActeurs
 
 
 class MainActivity : ComponentActivity() {
@@ -52,24 +66,46 @@ class MainActivity : ComponentActivity() {
             val backstack by navController.currentBackStackEntryAsState()
             val currentDestination = backstack?.destination
 
+            var searchText by remember { mutableStateOf("") }
+            var isSearching by remember { mutableStateOf(false) }
+
+
             FirstApplicationChiaraTheme {
                 Scaffold(
-                    topBar = {
-                        SearchBar(
-                            query = searchQuery.text,
-                            onQueryChange = { newValue -> searchQuery = TextFieldValue(newValue) },
-                            onSearch = { isSearchActive = false },
-                            active = isSearchActive,
-                            onActiveChange = { isActive -> isSearchActive = isActive },
-                            placeholder = { Text("Rechercher un film") },
-                            leadingIcon = {
-                                Icon(imageVector = Icons.Rounded.Search, contentDescription = "Icône de recherche")
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-                        ) {
-                            // Suggestions ou résultats de recherche peuvent être ajoutés ici si nécessaire
+                        topBar = {
+                            if (currentDestination?.hasRoute<DestProfil>() == false) {
+                            SearchBar(
+                                query = searchText,
+                                onQueryChange = {
+                                    searchText = it
+                                                },
+                                onSearch = {
+                                    if (currentDestination?.hasRoute<DestFilms>() == true){
+                                        viewmodel.searchMovies(it)
+                                    }
+                                    if (currentDestination?.hasRoute<DestSeries>() == true){
+                                        viewmodel.searchSeries(it)
+                                    }
+                                    if (currentDestination?.hasRoute<DestActeurs>() == true){
+                                        viewmodel.searchActeurs(it)
+                                    }
+                                    isSearching = false
+                                },
+                                active = isSearching,
+                                onActiveChange = { isSearching = it },
+                                placeholder = { Text("Rechercher...") },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Search,
+                                        contentDescription = "Icône de recherche"
+                                    )
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+
+                            ) {
+                            }
                         }
                     },
                     bottomBar = {
@@ -80,22 +116,33 @@ class MainActivity : ComponentActivity() {
                                 NavigationBarItem(
                                     icon = {
                                         Icon(
-
-                                            Icons.Rounded.AccountCircle,
-                                            contentDescription = "menu"
-                                        )
-                                    }, label = { Text("Mon profil") },
-                                    selected = currentDestination?.hasRoute<DestProfil>() == true,
-                                    onClick = { navController.navigate(DestProfil()) })
-                                NavigationBarItem(
-                                    icon = {
-                                        Icon(
-                                            Icons.Rounded.Menu,
+                                            Icons.Rounded.Star,
                                             contentDescription = "menu"
                                         )
                                     }, label = { Text("Films") },
                                     selected = currentDestination?.hasRoute<DestFilms>() == true,
-                                    onClick = { navController.navigate(DestFilms()) })
+                                    onClick = { navController.navigate(DestFilms())
+                                                searchText = ""})
+                                NavigationBarItem(
+                                    icon = {
+                                        Icon(
+                                            Icons.Rounded.Notifications,
+                                            contentDescription = "menu"
+                                        )
+                                    }, label = { Text("Series") },
+                                    selected = currentDestination?.hasRoute<DestSeries>() == true,
+                                    onClick = { navController.navigate(DestSeries())
+                                                searchText = ""})
+                                NavigationBarItem(
+                                    icon = {
+                                        Icon(
+                                            Icons.Rounded.Face,
+                                            contentDescription = "menu"
+                                        )
+                                    }, label = { Text("Acteurs") },
+                                    selected = currentDestination?.hasRoute<DestActeurs>() == true,
+                                    onClick = { navController.navigate(DestActeurs())
+                                        searchText = ""})
                             }
                         }
                 })  { innerPadding ->
@@ -108,6 +155,8 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable<DestFilms> { DescFilms(viewmodel) }
+                        composable<DestSeries> { DescSeries(viewmodel) }
+                        composable<DestActeurs> { DescActeurs(viewmodel) }
 
                     }
                 }

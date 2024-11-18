@@ -1,5 +1,7 @@
 package com.example.firstapplicationchiara
 
+import TmdbResult2
+import TmdbResult3
 import TmdbResults
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -14,8 +16,20 @@ interface TmbdAPI {
         @Query("api_key") apiKey: String,
         @Query("query") keyWord: String) : TmdbResults
 
-   // @GET("search/tv")
-   // suspend fun getSeriesByKeyWord(
-   //     @Query("api_key") apiKey: String,
-    //    @Query("query") keyWord: String) : TvShowResults
+    @GET("trending/tv/week")
+    suspend fun serieList(@Query("api_key") apikey: String) : TmdbResult2
+
+    @GET("search/tv")
+    suspend fun getSeriesByKeyWord(
+        @Query("api_key") apiKey: String,
+        @Query("query") keyWord: String) : TmdbResult2
+
+    @GET("trending/person/week")
+    suspend fun actorsList(@Query("api_key") apikey: String) : TmdbResult3
+
+    @GET("search/person")
+    suspend fun getPersonByKeyWord(
+        @Query("api_key") apiKey: String,
+        @Query("query") keyWord: String) : TmdbResult3
+
 }
