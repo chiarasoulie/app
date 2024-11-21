@@ -2,8 +2,11 @@ package com.example.firstapplicationchiara
 
 import TmdbResult2
 import TmdbResult3
+import TmdbResult4
+import TmdbResult5
 import TmdbResults
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 
@@ -31,5 +34,15 @@ interface TmbdAPI {
     suspend fun getPersonByKeyWord(
         @Query("api_key") apiKey: String,
         @Query("query") keyWord: String) : TmdbResult3
+
+    @GET("movie/{movie_id}?append_to_response=credits")
+    suspend fun getFilmDetail(
+        @Path("movie_id") movieId:String,
+        @Query("api_key") apikey: String) : TmdbResult4
+
+    @GET("tv/{tv_id}?append_to_response=credits")
+    suspend fun getSerieDetail(
+        @Path("tv_id") tvId:String,
+        @Query("api_key") apikey: String) : TmdbResult5
 
 }

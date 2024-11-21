@@ -22,11 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 
 @Composable
-fun DescSeries(viewmodel: MainViewModel) {
+fun DescSeries(navController: NavHostController, viewmodel: MainViewModel) {
     val series by viewmodel.series.collectAsState()
+    var serieId: Int
 
 
     LaunchedEffect(true) {
@@ -38,7 +40,11 @@ fun DescSeries(viewmodel: MainViewModel) {
 
         items(series) { serie ->
             Column {
-                ElevatedCard(elevation = CardDefaults.cardElevation(
+                ElevatedCard(onClick = {
+                    serieId = serie.id
+                    navController.navigate(Serie(serieId.toString()))
+                },
+                    elevation = CardDefaults.cardElevation(
                     defaultElevation = 6.dp),
                     modifier = Modifier
                         .size(width = 200.dp, height = 375.dp)

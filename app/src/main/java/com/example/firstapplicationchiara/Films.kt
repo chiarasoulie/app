@@ -22,12 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 
 @Composable
-fun DescFilms(viewmodel: MainViewModel) {
+fun DescFilms(navController: NavHostController, viewmodel: MainViewModel) {
     val movies by viewmodel.movies.collectAsState()
-
+    var movieId: Int
 
     LaunchedEffect(true) {
         viewmodel.getFilms()
@@ -38,14 +39,19 @@ fun DescFilms(viewmodel: MainViewModel) {
 
         items(movies) { movie ->
             Column {
-                ElevatedCard(elevation = CardDefaults.cardElevation(
+                ElevatedCard(onClick = {
+                    movieId = movie.id
+                    navController.navigate(Film(movieId.toString()))
+                },
+                    elevation = CardDefaults.cardElevation(
                     defaultElevation = 6.dp),
                     modifier = Modifier
                         .size(width = 200.dp, height = 375.dp)
                         .padding(8.dp),
                     colors = CardDefaults.elevatedCardColors(
                         containerColor = Color(0xFFD2B48C)
-                    )) {
+                    )
+                ) {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/w780/" + movie.poster_path,
                         contentDescription = "films"

@@ -1,49 +1,39 @@
 package com.example.firstapplicationchiara
 
+import Series
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Face
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.firstapplicationchiara.ui.theme.FirstApplicationChiaraTheme
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.Serializable
 
 
@@ -51,6 +41,10 @@ import kotlinx.serialization.Serializable
 @Serializable class DestFilms
 @Serializable class DestSeries
 @Serializable class DestActeurs
+@Serializable data class Film(val id: String)
+@Serializable data class Serie(val id: String)
+
+
 
 
 class MainActivity : ComponentActivity() {
@@ -59,6 +53,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val viewmodel : MainViewModel by viewModels()
+
         enableEdgeToEdge()
         setContent {
             val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
@@ -154,9 +149,19 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
-                        composable<DestFilms> { DescFilms(viewmodel) }
-                        composable<DestSeries> { DescSeries(viewmodel) }
+                        composable<DestFilms> { DescFilms(navController, viewmodel) }
+                        composable<DestSeries> { DescSeries(navController, viewmodel) }
                         composable<DestActeurs> { DescActeurs(viewmodel) }
+                        composable<Film> { backStackEntry ->
+                            val filmDetail:Film = backStackEntry.toRoute()
+                            FilmDetailFun(viewmodel, filmDetail.id)
+                        }
+                        composable<Serie> { backStackEntry ->
+                            val serieDetail: Serie = backStackEntry.toRoute()
+                            SerieDetailFun(viewmodel, serieDetail.id)
+                        }
+
+
 
                     }
                 }
