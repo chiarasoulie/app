@@ -23,12 +23,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.AsyncImage
 
 @Composable
-fun DescSeries(navController: NavHostController, viewmodel: MainViewModel) {
+fun DescSeries(navController: NavHostController, viewmodel: MainViewModel,  windowSizeClass: WindowSizeClass) {
     val series by viewmodel.series.collectAsState()
     var serieId: Int
+
+    val columns = when (windowSizeClass.windowWidthSizeClass) {
+        WindowWidthSizeClass.COMPACT -> 2
+        WindowWidthSizeClass.MEDIUM -> 3
+        WindowWidthSizeClass.EXPANDED -> 4
+        else -> 2
+    }
 
 
     LaunchedEffect(true) {
@@ -36,7 +45,7 @@ fun DescSeries(navController: NavHostController, viewmodel: MainViewModel) {
     }
 
 
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+    LazyVerticalGrid(columns = GridCells.Fixed(columns)) {
 
         items(series) { serie ->
             Column {

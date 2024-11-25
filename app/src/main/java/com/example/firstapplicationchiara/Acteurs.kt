@@ -23,11 +23,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.AsyncImage
 
 @Composable
-fun DescActeurs(viewmodel: MainViewModel) {
+fun DescActeurs(viewmodel: MainViewModel, windowSizeClass: WindowSizeClass) {
     val acteurs by viewmodel.acteurs.collectAsState()
+
+    val columns = when (windowSizeClass.windowWidthSizeClass) {
+        WindowWidthSizeClass.COMPACT -> 2
+        WindowWidthSizeClass.MEDIUM -> 3
+        WindowWidthSizeClass.EXPANDED -> 4
+        else -> 2
+    }
 
 
     LaunchedEffect(true) {
@@ -35,7 +44,7 @@ fun DescActeurs(viewmodel: MainViewModel) {
     }
 
 
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+    LazyVerticalGrid(columns = GridCells.Fixed(columns)) {
 
         items(acteurs) { acteur ->
             Column {

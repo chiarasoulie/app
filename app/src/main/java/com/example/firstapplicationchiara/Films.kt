@@ -23,19 +23,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.AsyncImage
 
+
 @Composable
-fun DescFilms(navController: NavHostController, viewmodel: MainViewModel) {
+fun DescFilms(navController: NavHostController, viewmodel: MainViewModel, windowSizeClass: WindowSizeClass) {
     val movies by viewmodel.movies.collectAsState()
     var movieId: Int
+    val columns = when (windowSizeClass.windowWidthSizeClass) {
+        WindowWidthSizeClass.COMPACT -> 2
+        WindowWidthSizeClass.MEDIUM -> 3
+        WindowWidthSizeClass.EXPANDED -> 4
+        else -> 2
+    }
 
     LaunchedEffect(true) {
         viewmodel.getFilms()
     }
 
 
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+    LazyVerticalGrid(columns = GridCells.Fixed(columns)) {
 
         items(movies) { movie ->
             Column {

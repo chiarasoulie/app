@@ -21,6 +21,8 @@ import coil.compose.AsyncImage
 @Composable
 fun SerieDetailFun(viewModel: MainViewModel, id: String) {
     val serieDetail by viewModel.serieDetails.collectAsState()
+
+
     viewModel.getSerieDetail(id)
 
 
