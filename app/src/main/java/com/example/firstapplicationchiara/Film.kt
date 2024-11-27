@@ -18,6 +18,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
+
+/**
+ * Composable qui affiche les détails d'un film, y compris l'affiche, le titre, la description,
+ * les genres, la note, la date de sortie et les acteurs associés.
+ *
+ * Paramètres :
+ * @param viewModel - Le ViewModel qui contient la logique métier et les données associées au film.
+ * @param id - L'identifiant unique du film dont les détails doivent être affichés.
+ */
 @Composable
 fun FilmDetailFun(viewModel: MainViewModel, id: String) {
     val filmDetail by viewModel.movieDetails.collectAsState()
@@ -86,7 +95,7 @@ fun FilmDetailFun(viewModel: MainViewModel, id: String) {
             }
 
             // Informations supplémentaires (Note et Date de sortie)
-            item() {
+            item {
                 Column {
                     // Note
                     Text(

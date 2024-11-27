@@ -18,6 +18,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
+/**
+ * Composable qui affiche les détails d'une série, y compris l'affiche, le titre, la description,
+ * les genres, la note, la date de sortie, le nombre d'épisodes et de saisons et les acteurs associés.
+ *
+ * Paramètres :
+ * @param viewModel - Le ViewModel qui contient la logique métier et les données associées au film.
+ * @param id - L'identifiant unique du film dont les détails doivent être affichés.
+ */
 @Composable
 fun SerieDetailFun(viewModel: MainViewModel, id: String) {
     val serieDetail by viewModel.serieDetails.collectAsState()

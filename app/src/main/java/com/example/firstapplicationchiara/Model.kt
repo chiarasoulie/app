@@ -204,15 +204,6 @@ data class CreatedBy(
     val profile_path: String
 )
 
-data class Credits1(
-    val cast: List<Cast>,
-    val crew: List<Crew>
-)
-
-data class Genre1(
-    val id: Int,
-    val name: String
-)
 
 data class LastEpisodeToAir(
     val air_date: String,
@@ -237,34 +228,6 @@ data class Network(
     val origin_country: String
 )
 
-data class NextEpisodeToAir(
-    val air_date: String,
-    val episode_number: Int,
-    val episode_type: String,
-    val id: Int,
-    val name: String,
-    val overview: String,
-    val production_code: String,
-    val runtime: Int,
-    val season_number: Int,
-    val show_id: Int,
-    val still_path: Any,
-    val vote_average: Double,
-    val vote_count: Int
-)
-
-data class ProductionCompany1(
-    val id: Int,
-    val logo_path: String,
-    val name: String,
-    val origin_country: String
-)
-
-data class ProductionCountry1(
-    val iso_3166_1: String,
-    val name: String
-)
-
 data class Season(
     val air_date: String,
     val episode_count: Int,
@@ -274,38 +237,4 @@ data class Season(
     val poster_path: String,
     val season_number: Int,
     val vote_average: Double
-)
-
-data class SpokenLanguage1(
-    val english_name: String,
-    val iso_639_1: String,
-    val name: String
-)
-
-data class Cast1(
-    val adult: Boolean,
-    val character: String,
-    val credit_id: String,
-    val gender: Int,
-    val id: Int,
-    val known_for_department: String,
-    val name: String,
-    val order: Int,
-    val original_name: String,
-    val popularity: Double,
-    val profile_path: String
-)
-
-data class Crew1(
-    val adult: Boolean,
-    val credit_id: String,
-    val department: String,
-    val gender: Int,
-    val id: Int,
-    val job: String,
-    val known_for_department: String,
-    val name: String,
-    val original_name: String,
-    val popularity: Double,
-    val profile_path: String
 )

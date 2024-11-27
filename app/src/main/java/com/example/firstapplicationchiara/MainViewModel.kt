@@ -17,7 +17,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repo: Repository): ViewModel(){
+class MainViewModel @Inject constructor(): ViewModel(){
     private val _movies = MutableStateFlow<List<Movie>>(listOf())
     val movies = _movies.asStateFlow()
 
@@ -33,10 +33,10 @@ class MainViewModel @Inject constructor(private val repo: Repository): ViewModel
     private val _serieDetails = MutableStateFlow<TmdbResult5?>(null)
     val serieDetails = _serieDetails.asStateFlow()
 
-    val apikey = "9c9a8bdde556b573366003461f695329"
+    private val apikey = "9c9a8bdde556b573366003461f695329"
 
 
-    val service = Retrofit.Builder()
+    private val service = Retrofit.Builder()
         .baseUrl("https://api.themoviedb.org/3/")
         .addConverterFactory(MoshiConverterFactory.create())
         .build()

@@ -3,13 +3,10 @@ package com.example.firstapplicationchiara
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,6 +24,19 @@ import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.AsyncImage
 
+/**
+ * Composable pour afficher une grille de series.
+ *
+ * Fonctionnalités :
+ * - Adapte le nombre de colonnes de la grille en fonction de la taille de l'écran.
+ * - Récupère la liste des series via le ViewModel lors de la composition.
+ * - Affiche chaque serie avec une carte contenant l'affche, le nom et la date de sortie.
+ *
+ * Paramètres :
+ * @param viewmodel - Le ViewModel utilisé pour accéder à la liste des acteurs.
+ * @param windowSizeClass - Classe de taille d'écran utilisée pour déterminer le nombre de colonnes de la grille nécessaire.
+ * @param navController - Contrôleur de navigation pour gérer les transitions entre les écrans.
+ */
 @Composable
 fun DescSeries(navController: NavHostController, viewmodel: MainViewModel,  windowSizeClass: WindowSizeClass) {
     val series by viewmodel.series.collectAsState()

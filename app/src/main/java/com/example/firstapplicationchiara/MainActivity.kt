@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Notifications
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -74,6 +74,12 @@ class MainActivity : ComponentActivity() {
 
         }
     }
+    /**
+    * Fonction principale de l'écran :configure l'interface utilisateur en fonction de la largeur de l'écran (portrait ou paysage)
+    * et gère la navigation entre les différentes sections de l'application (Films, Séries, Acteurs).
+    * Paramètres :
+    * @param viewmodel - Le ViewModel principal pour gérer les données des composables.
+    */
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
      fun MainScreen(
@@ -102,7 +108,7 @@ class MainActivity : ComponentActivity() {
                                 Icon(Icons.Rounded.Star, contentDescription = "Films")
                             },
                             label = { Text("Films") },
-                            selected = currentDestination?.hasRoute<DestFilms>() == true,
+                            selected = currentDestination.hasRoute<DestFilms>(),
                             onClick = {
                                 navController.navigate(DestFilms())
                                 searchText = ""
@@ -114,7 +120,7 @@ class MainActivity : ComponentActivity() {
                                 Icon(Icons.Rounded.Notifications, contentDescription = "Séries")
                             },
                             label = { Text("Séries") },
-                            selected = currentDestination?.hasRoute<DestSeries>() == true,
+                            selected = currentDestination.hasRoute<DestSeries>(),
                             onClick = {
                                 navController.navigate(DestSeries())
                                 searchText = ""
@@ -126,7 +132,7 @@ class MainActivity : ComponentActivity() {
                                 Icon(Icons.Rounded.Face, contentDescription = "Acteurs")
                             },
                             label = { Text("Acteurs") },
-                            selected = currentDestination?.hasRoute<DestActeurs>() == true,
+                            selected = currentDestination.hasRoute<DestActeurs>(),
                             onClick = {
                                 navController.navigate(DestActeurs())
                                 searchText = ""
@@ -161,21 +167,22 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         if (currentDestination != null) {
                             if (!currentDestination.hasRoute<DestProfil>() && !currentDestination.hasRoute<Film>() && !currentDestination.hasRoute<Serie>()) {
+                                // barre de recherche grande lorsqu'on effectue une nouvelle recherche
                                 if (isSearchBarExpanded) {
                                     SearchBar(
                                         query = searchText,
                                         onQueryChange = { searchText = it },
                                         onSearch = {
                                             when {
-                                                currentDestination?.hasRoute<DestFilms>() == true -> viewmodel.searchMovies(
+                                                currentDestination.hasRoute<DestFilms>() -> viewmodel.searchMovies(
                                                     it
                                                 )
 
-                                                currentDestination?.hasRoute<DestSeries>() == true -> viewmodel.searchSeries(
+                                                currentDestination.hasRoute<DestSeries>() -> viewmodel.searchSeries(
                                                     it
                                                 )
 
-                                                currentDestination?.hasRoute<DestActeurs>() == true -> viewmodel.searchActeurs(
+                                                currentDestination.hasRoute<DestActeurs>() -> viewmodel.searchActeurs(
                                                     it
                                                 )
                                             }
@@ -220,13 +227,13 @@ class MainActivity : ComponentActivity() {
                                 query = searchText,
                                 onQueryChange = { searchText = it },
                                 onSearch = {
-                                    if (currentDestination?.hasRoute<DestFilms>() == true){
+                                    if (currentDestination.hasRoute<DestFilms>()){
                                         viewmodel.searchMovies(it)
                                     }
-                                    if (currentDestination?.hasRoute<DestSeries>() == true){
+                                    if (currentDestination.hasRoute<DestSeries>()){
                                         viewmodel.searchSeries(it)
                                     }
-                                    if (currentDestination?.hasRoute<DestActeurs>() == true){
+                                    if (currentDestination.hasRoute<DestActeurs>()){
                                         viewmodel.searchActeurs(it)
                                     }
                                     isSearching = false
@@ -254,7 +261,7 @@ class MainActivity : ComponentActivity() {
                                     Icon(Icons.Rounded.Star, contentDescription = "Films")
                                 },
                                 label = { Text("Films") },
-                                selected = currentDestination?.hasRoute<DestFilms>() == true,
+                                selected = currentDestination.hasRoute<DestFilms>(),
                                 onClick = {
                                     navController.navigate(DestFilms())
                                     searchText = ""
@@ -262,10 +269,10 @@ class MainActivity : ComponentActivity() {
                             )
                             NavigationBarItem(
                                 icon = {
-                                    Icon(Icons.Rounded.Notifications, contentDescription = "Séries")
+                                    Icon(Icons.Rounded.PlayArrow, contentDescription = "Séries")
                                 },
                                 label = { Text("Séries") },
-                                selected = currentDestination?.hasRoute<DestSeries>() == true,
+                                selected = currentDestination.hasRoute<DestSeries>(),
                                 onClick = {
                                     navController.navigate(DestSeries())
                                     searchText = ""
@@ -276,7 +283,7 @@ class MainActivity : ComponentActivity() {
                                     Icon(Icons.Rounded.Face, contentDescription = "Acteurs")
                                 },
                                 label = { Text("Acteurs") },
-                                selected = currentDestination?.hasRoute<DestActeurs>() == true,
+                                selected = currentDestination.hasRoute<DestActeurs>(),
                                 onClick = {
                                     navController.navigate(DestActeurs())
                                     searchText = ""
@@ -300,6 +307,10 @@ class MainActivity : ComponentActivity() {
 
     }
 
+    /**
+     * Configure la navigation de l'application en définissant les différentes destinations
+     * et leurs composables associés.
+     */
     @Composable
     fun NavigationContent(
         navController: NavHostController,
@@ -314,7 +325,6 @@ class MainActivity : ComponentActivity() {
         ) {
             composable<DestProfil> {
                 Greeting(
-                    name = "app",
                     classes = windowSizeClass,
                     navController = navController
                 )

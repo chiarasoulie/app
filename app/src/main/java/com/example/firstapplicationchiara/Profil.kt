@@ -26,7 +26,7 @@ import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier, classes: WindowSizeClass, navController: NavHostController) {
+fun Greeting( classes: WindowSizeClass, navController: NavHostController) {
     val classeLargeur = classes.windowWidthSizeClass
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
@@ -42,7 +42,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier, classes: WindowSizeCla
 
             }/* largeur faible */
             else -> {
-                Row(){
+                Row{
                     Column(horizontalAlignment = AbsoluteAlignment.Left) {
                         ProfileSection()
                         InformationSection()
@@ -121,14 +121,4 @@ fun StartButton(navController: NavHostController) {
     Button(onClick = { navController.navigate(DestFilms()) }) {
         Text("Démarrer")
     }
-}
-
-
-
-
-
-
-@Composable
-fun MyScreen(showTopAppBar: Boolean) {
-
 }

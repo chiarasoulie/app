@@ -7,7 +7,7 @@ import TmdbResult5
 import TmdbResults
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import retrofit2.http.Query
+
 
 class FakeTmdbApi : TmbdAPI{
 
