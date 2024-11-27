@@ -32,7 +32,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -45,6 +44,7 @@ import androidx.navigation.toRoute
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.example.firstapplicationchiara.ui.theme.FirstApplicationChiaraTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.Serializable
 
 
@@ -58,9 +58,8 @@ import kotlinx.serialization.Serializable
 
 
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -69,12 +68,8 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-            val navController = rememberNavController()
-
-
             FirstApplicationChiaraTheme {
-                MainScreen(navController, viewmodel, windowSizeClass)
+                MainScreen(viewmodel)
             }
 
         }
@@ -82,9 +77,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
      fun MainScreen(
-        navController: NavHostController,
         viewmodel: MainViewModel,
-        windowSizeClass: WindowSizeClass
     ) {
 
         val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
@@ -96,10 +89,6 @@ class MainActivity : ComponentActivity() {
         var isSearching by remember { mutableStateOf(false) }
         var isSearchBarExpanded by remember { mutableStateOf(false) }
 
-
-        val searchBarHeight by animateDpAsState(
-            targetValue = if (isSearchBarExpanded) 56.dp else 48.dp
-        )
         val useNavigationRail = windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT
 
         if (useNavigationRail) {
@@ -191,8 +180,6 @@ class MainActivity : ComponentActivity() {
                                                 )
                                             }
                                             isSearching = false
-                                            isSearchBarExpanded =
-                                                false // Réduire la SearchBar après la recherche
                                         },
                                         active = isSearching,
                                         onActiveChange = { isSearching = it },
@@ -227,33 +214,35 @@ class MainActivity : ComponentActivity() {
             // Mode portrait ou écran étroit (Compact)
             Scaffold(
                 topBar = {
-                    if (currentDestination?.hasRoute<DestProfil>() == false) {
-                        SearchBar(
-                            query = searchText,
-                            onQueryChange = { searchText = it },
-                            onSearch = {
+                    if (currentDestination != null) {
+                        if (!currentDestination.hasRoute<DestProfil>() && !currentDestination.hasRoute<Film>() && !currentDestination.hasRoute<Serie>()) {
+                            SearchBar(
+                                query = searchText,
+                                onQueryChange = { searchText = it },
+                                onSearch = {
                                     if (currentDestination?.hasRoute<DestFilms>() == true){
                                         viewmodel.searchMovies(it)
                                     }
-                                        if (currentDestination?.hasRoute<DestSeries>() == true){
+                                    if (currentDestination?.hasRoute<DestSeries>() == true){
                                         viewmodel.searchSeries(it)
                                     }
                                     if (currentDestination?.hasRoute<DestActeurs>() == true){
                                         viewmodel.searchActeurs(it)
                                     }
-                                            isSearching = false
-                            },
-                            active = isSearching,
-                            onActiveChange = { isSearching = it },
-                            placeholder = { Text("Rechercher...") },
-                            leadingIcon = {
-                                Icon(Icons.Rounded.Search, contentDescription = "Icône de recherche")
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-                        ){
+                                    isSearching = false
+                                },
+                                active = isSearching,
+                                onActiveChange = { isSearching = it },
+                                placeholder = { Text("Rechercher...") },
+                                leadingIcon = {
+                                    Icon(Icons.Rounded.Search, contentDescription = "Icône de recherche")
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+                            ){
 
+                            }
                         }
                     }
                 },

@@ -7,14 +7,17 @@ import TmdbResult4
 import TmdbResult5
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Inject
 
-
-class MainViewModel : ViewModel(){
+@HiltViewModel
+class MainViewModel @Inject constructor(private val repo: Repository): ViewModel(){
     private val _movies = MutableStateFlow<List<Movie>>(listOf())
     val movies = _movies.asStateFlow()
 
