@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.PlayArrow
@@ -55,6 +56,7 @@ import kotlinx.serialization.Serializable
 @Serializable class DestActeurs
 @Serializable data class Film(val id: String)
 @Serializable data class Serie(val id: String)
+@Serializable class DestPlaylist
 
 
 
@@ -135,6 +137,18 @@ class MainActivity : ComponentActivity() {
                             selected = currentDestination.hasRoute<DestActeurs>(),
                             onClick = {
                                 navController.navigate(DestActeurs())
+                                searchText = ""
+                            }
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        NavigationRailItem(
+                            icon = {
+                                Icon(Icons.Rounded.AddCircle, contentDescription = "Playlist")
+                            },
+                            label = { Text("Playlist") },
+                            selected = currentDestination.hasRoute<DestPlaylist>(),
+                            onClick = {
+                                navController.navigate(DestPlaylist())
                                 searchText = ""
                             }
                         )
@@ -289,6 +303,17 @@ class MainActivity : ComponentActivity() {
                                     searchText = ""
                                 }
                             )
+                            NavigationBarItem(
+                                icon = {
+                                    Icon(Icons.Rounded.AddCircle, contentDescription = "Playlist")
+                                },
+                                label = { Text("Playlist") },
+                                selected = currentDestination.hasRoute<DestPlaylist>(),
+                                onClick = {
+                                    navController.navigate(DestPlaylist())
+                                    searchText = ""
+                                }
+                            )
                         }
                     }
                 }
@@ -340,6 +365,7 @@ class MainActivity : ComponentActivity() {
                 val serieDetail: Serie = backStackEntry.toRoute()
                 SerieDetailFun(viewmodel, serieDetail.id)
             }
+            composable<DestPlaylist> { DescPlaylist(navController, viewmodel, windowSizeClass) }
         }
     }
 

@@ -118,7 +118,7 @@ fun Contactligne(iconRes: Int, contactText: String) {
 
 @Composable
 fun StartButton(navController: NavHostController) {
-    Button(onClick = { navController.navigate(DestFilms()) }) {
+    Button(onClick = { navController.navigate(DestPlaylist()) }) {
         Text("Démarrer")
     }
 }
