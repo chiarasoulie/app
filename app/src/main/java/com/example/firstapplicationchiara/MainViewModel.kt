@@ -2,11 +2,15 @@ package com.example.firstapplicationchiara
 
 import Actor
 import Movie
+import Playlist
 import Series
 import TmdbResult4
 import TmdbResult5
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplicationtest.playlistjson
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +30,9 @@ class MainViewModel @Inject constructor(): ViewModel(){
 
     private val _acteurs = MutableStateFlow<List<Actor>>(listOf())
     val acteurs = _acteurs.asStateFlow()
+
+    private val _playlist = MutableStateFlow<Playlist?>(null)
+    val playlist = _playlist.asStateFlow()
 
     private val _movieDetails = MutableStateFlow<TmdbResult4?>(null)
     val movieDetails = _movieDetails.asStateFlow()
@@ -88,5 +95,15 @@ class MainViewModel @Inject constructor(): ViewModel(){
             _serieDetails.value = service.getSerieDetail(id, apikey)
         }
 
+    }
+    fun getPlaylist(){
+        viewModelScope.launch {
+            _playlist.value = fetchPlayList()
+        }
+    }
+    // recupere la playlist
+    fun fetchPlayList(): Playlist {
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        return moshi.adapter(Playlist::class.java).fromJson(playlistjson)!!
     }
 }
