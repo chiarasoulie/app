@@ -84,8 +84,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit)
     implementation(libs.coil.compose)
-    implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
-    implementation("com squareup.moshi:moshi:1.15.1")
+
+
     // pour hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

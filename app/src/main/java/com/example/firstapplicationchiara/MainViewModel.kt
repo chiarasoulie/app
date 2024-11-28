@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplicationtest.playlistjson
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -103,7 +103,7 @@ class MainViewModel @Inject constructor(): ViewModel(){
     }
     // recupere la playlist
     fun fetchPlayList(): Playlist {
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        val moshi = Moshi.Builder().build()
         return moshi.adapter(Playlist::class.java).fromJson(playlistjson)!!
     }
 }
